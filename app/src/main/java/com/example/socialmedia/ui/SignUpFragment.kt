@@ -3,6 +3,7 @@ package com.example.socialmedia.ui
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -43,8 +44,9 @@ class SignUpFragment : Fragment() {
             binding.progressBar.isVisible =false
             when(it){
                 is NetworkResult.Success -> {
-                    tokenManager.saveToken(it.data!!.accessToken)
-                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment())
+                    tokenManager.saveToken(it.data!!.access)
+                    Log.d("LoginResponse", "${it.data}")
+                    findNavController().navigate(SignUpFragmentDirections.actionSignUpFragmentToHomeFragment(it.data.access))
                 }
                 is NetworkResult.Error -> {
                     binding.txtError.text = it.message
@@ -73,13 +75,13 @@ class SignUpFragment : Fragment() {
 
     private fun validateUserInput(): Pair<Boolean, String> {
         val userrequest = getUserRequest()
-        return validate(userrequest.username, userrequest.email,userrequest.password)
+        return validate(userrequest.name, userrequest.email,userrequest.password)
     }
     private fun getUserRequest(): SignUpRequest{
         val emailAddress = binding.txtEmail.text.toString()
         val password = binding.txtPassword.text.toString()
         val userName = binding.txtUsername.text.toString()
-        return SignUpRequest(emailAddress,password,userName)
+        return SignUpRequest(userName,emailAddress,password,password)
     }
 
     private fun validate(userName: String, emailAddress : String, password : String) : Pair<Boolean, String>{
@@ -90,7 +92,7 @@ class SignUpFragment : Fragment() {
         else if (!Patterns.EMAIL_ADDRESS.matcher(emailAddress).matches()){
             result = Pair(false, "Please provide valid email")
         }
-        else if(password.length <= 5){
+        else if(password.length <= 3){
             result = Pair(false, "password length should be greater than 5")
         }
         return result

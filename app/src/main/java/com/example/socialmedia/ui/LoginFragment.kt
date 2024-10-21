@@ -1,17 +1,17 @@
 package com.example.socialmedia.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.util.Patterns
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import com.example.socialmedia.R
 import com.example.socialmedia.databinding.FragmentLoginBinding
 import com.example.socialmedia.model.LoginRequest
 import com.example.socialmedia.network.RetrofitService
@@ -41,8 +41,9 @@ class LoginFragment : Fragment() {
             binding.progressBar.isVisible =false
             when(it){
                 is NetworkResult.Success -> {
-                    tokenManager.saveToken(it.data!!.accessToken)
-
+                    tokenManager.saveToken(it.data!!.access)
+                    Log.d("LoginResponse", "${it.data}")
+                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment(it.data.access))
                 }
                 is NetworkResult.Error -> {
                     binding.txtError.text = it.message
@@ -57,7 +58,6 @@ class LoginFragment : Fragment() {
             val validation = validateUserInput()
             if (validation.first){
                 loginViewModel.loginUser(getUserRequest())
-                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment())
             }else{
                 binding.txtError.text = validation.second
             }
@@ -92,7 +92,7 @@ class LoginFragment : Fragment() {
         else if (!Patterns.EMAIL_ADDRESS.matcher(emailAddress).matches()){
             result = Pair(false, "Please provide valid email")
         }
-        else if(password.length <= 5){
+        else if(password.length <= 3){
             result = Pair(false, "password length should be greater than 5")
         }
         return result
