@@ -31,10 +31,8 @@ class LoginRepository (private val loginApi: LoginApi) {
     private fun handleResponse(response: Response<LoginResponse>) {
         if (response.isSuccessful && response.body() != null) {
             _loginResponseLiveData.postValue(NetworkResult.Success(response.body()!!))
-
         } else if (response.errorBody() != null) {
-            val error0bj = JSONObject(response.errorBody()!!.charStream().readText())
-            _loginResponseLiveData.postValue(NetworkResult.Error(error0bj.getString("message")))
+            _loginResponseLiveData.postValue(NetworkResult.Error(response.errorBody().toString(),null))
         } else {
             _loginResponseLiveData.postValue(NetworkResult.Error("Something went wrong!!"))
         }
