@@ -13,3 +13,8 @@
 .externalNativeBuild
 .cxx
 local.properties
+/.idea/.name
+/.idea/deploymentTargetSelector.xml
+/.idea/material_theme_project_new.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/runConfigurations.xml
