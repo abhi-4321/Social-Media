@@ -4,8 +4,10 @@ import android.content.Context
 import android.util.Log
 import com.example.socialmedia.util.Constants.PREF_TOKEN_FILE
 import com.example.socialmedia.util.Constants.USER_TOKEN
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-class TokenManager (context : Context) {
+class TokenManager @Inject constructor(@ApplicationContext context : Context) {
 
     private var pref = context.getSharedPreferences(PREF_TOKEN_FILE, Context.MODE_PRIVATE)
 

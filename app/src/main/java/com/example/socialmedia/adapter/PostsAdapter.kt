@@ -27,7 +27,9 @@ class PostsAdapter(private val onItemsClick: OnItemsClick) : ListAdapter<Post,Po
             binding.share.setOnClickListener {
                 onItemsClick.onShareClick(post)
             }
-            binding.comment.setOnClickListener {  }
+            binding.comment.setOnClickListener {
+                onItemsClick.onCommentClick(post.id)
+            }
             binding.more.setOnClickListener {
 
             }
@@ -47,7 +49,7 @@ class PostsAdapter(private val onItemsClick: OnItemsClick) : ListAdapter<Post,Po
 
     interface OnItemsClick {
         fun onLikeClick()
-        fun onCommentClick()
+        fun onCommentClick(postId: Int)
         fun onShareClick(post: Post)
         fun onMoreClick()
     }
