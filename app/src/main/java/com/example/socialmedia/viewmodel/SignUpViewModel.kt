@@ -8,10 +8,13 @@ import com.example.socialmedia.model.LoginResponse
 import com.example.socialmedia.model.SignUpRequest
 import com.example.socialmedia.repository.LoginRepository
 import com.example.socialmedia.util.NetworkResult
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SignUpViewModel(private val loginRepository: LoginRepository) : ViewModel() {
+@HiltViewModel
+class SignUpViewModel @Inject constructor(private val loginRepository: LoginRepository) : ViewModel() {
 
     val userResponseLiveData: LiveData<NetworkResult<LoginResponse>>
         get() = loginRepository.loginResponseLiveData

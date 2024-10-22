@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.socialmedia.ui.main.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_postInFragment"
+            app:destination="@id/postInFragment"
+            app:enterAnim="@anim/enter_anim"
+            app:exitAnim="@anim/exit_anim"
+            app:popEnterAnim="@anim/pop_enter_anim"
+            app:popExitAnim="@anim/pop_exit_anim"
+            >
+            <argument
+                android:name="postId"
+                app:argType="integer"
+                />
+        </action>
+        <action
+            android:id="@+id/action_homeFragment_to_profileFragment"
+            app:destination="@id/profileFragment"
+            app:enterAnim="@anim/enter_anim"
+            app:exitAnim="@anim/exit_anim"
+            app:popEnterAnim="@anim/pop_enter_anim"
+            app:popExitAnim="@anim/pop_exit_anim"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/postInFragment"
+        android:name="com.example.socialmedia.ui.main.PostInFragment"
+        android:label="fragment_post_in"
+        tools:layout="@layout/fragment_post_in">
+        <argument
+            android:name="postId"
+            app:argType="integer"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.socialmedia.ui.main.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+</navigation>

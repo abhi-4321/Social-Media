@@ -9,8 +9,9 @@ import com.example.socialmedia.network.LoginApi
 import com.example.socialmedia.util.NetworkResult
 import org.json.JSONObject
 import retrofit2.Response
+import javax.inject.Inject
 
-class LoginRepository (private val loginApi: LoginApi) {
+class LoginRepository @Inject constructor(private val loginApi: LoginApi) {
 
     private  val _loginResponseLiveData = MutableLiveData<NetworkResult<LoginResponse>>()
     val loginResponseLiveData : LiveData<NetworkResult<LoginResponse>>
@@ -32,7 +33,7 @@ class LoginRepository (private val loginApi: LoginApi) {
         if (response.isSuccessful && response.body() != null) {
             _loginResponseLiveData.postValue(NetworkResult.Success(response.body()!!))
         } else if (response.errorBody() != null) {
-            _loginResponseLiveData.postValue(NetworkResult.Error(response.errorBody().toString(),null))
+            _loginResponseLiveData.postValue(NetworkResult.Error(response.errorBody()!!.string(),null))
         } else {
             _loginResponseLiveData.postValue(NetworkResult.Error("Something went wrong!!"))
         }
