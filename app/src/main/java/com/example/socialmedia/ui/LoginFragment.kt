@@ -42,7 +42,6 @@ class LoginFragment : Fragment() {
             when(it){
                 is NetworkResult.Success -> {
                     tokenManager.saveToken(it.data!!.access)
-                    Log.d("LoginResponse", "${it.data}")
                     findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment(it.data.access))
                 }
                 is NetworkResult.Error -> {
@@ -52,6 +51,10 @@ class LoginFragment : Fragment() {
                     binding.progressBar.isVisible = true
                 }
             }
+        }
+
+        binding.txtEmail.setOnClickListener {
+            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment(""))
         }
 
         binding.btnLogin.setOnClickListener {
