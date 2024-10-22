@@ -45,7 +45,6 @@ class SignUpFragment : Fragment() {
             when(it){
                 is NetworkResult.Success -> {
                     tokenManager.saveToken(it.data!!.access)
-                    Log.d("LoginResponse", "${it.data}")
                     findNavController().navigate(SignUpFragmentDirections.actionSignUpFragmentToHomeFragment(it.data.access))
                 }
                 is NetworkResult.Error -> {
@@ -75,7 +74,7 @@ class SignUpFragment : Fragment() {
 
     private fun validateUserInput(): Pair<Boolean, String> {
         val userrequest = getUserRequest()
-        return validate(userrequest.name, userrequest.email,userrequest.password)
+        return validate(userrequest.name, userrequest.email,userrequest.password,userrequest.password2)
     }
     private fun getUserRequest(): SignUpRequest{
         val emailAddress = binding.txtEmail.text.toString()
@@ -84,9 +83,9 @@ class SignUpFragment : Fragment() {
         return SignUpRequest(userName,emailAddress,password,password)
     }
 
-    private fun validate(userName: String, emailAddress : String, password : String) : Pair<Boolean, String>{
+    private fun validate(userName: String, emailAddress : String, password : String, confirmPassword: String) : Pair<Boolean, String>{
         var result = Pair(true,"")
-        if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(emailAddress) || TextUtils.isEmpty(password)){
+        if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(emailAddress) || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)){
             result = Pair(false, "Please provide the credentials")
         }
         else if (!Patterns.EMAIL_ADDRESS.matcher(emailAddress).matches()){

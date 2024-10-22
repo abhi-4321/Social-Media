@@ -23,5 +23,19 @@ class RetrofitService(private val tokenManager: TokenManager) {
                     .create(LoginApi::class.java)
             return instance as LoginApi
         }
+
+        @Volatile
+        private var instancePosts: PostApi? = null
+
+        @Synchronized
+        fun getInstancePost(): PostApi {
+            if (instancePosts == null)
+                instancePosts = Retrofit.Builder()
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .baseUrl(Constants.BASE_URL)
+                    .build()
+                    .create(PostApi::class.java)
+            return instancePosts as PostApi
+        }
     }
 }

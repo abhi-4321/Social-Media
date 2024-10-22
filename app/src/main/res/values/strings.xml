@@ -3,6 +3,7 @@
     <string name="txt_already_have_account">Already have an account?<font color="#2196F3">Login</font></string>
     <string name="txt_sign_up">Sign Up</string>
     <string name="txt_password">Password</string>
+    <string name="txt_password_confirm">Confirm Password</string>
     <string name="txt_password_hint">........</string>
     <string name="txt_username">Username</string>
     <string name="txt_username_hint">cheezycode</string>
