@@ -1,6 +1,8 @@
 package com.example.socialmedia.db
 
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Upsert
 import com.example.socialmedia.db.entities.PostEntity
@@ -9,23 +11,18 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface AppDao {
 
-    @Upsert
-    suspend fun upsertPost(post: PostEntity)
-
-    @Query("""
-         Select count(*) from posts_table
-    """)
-    suspend fun getCount() : Int
+//    @Upsert
+//    suspend fun upsert(postId: Int)
 
     @Query(""" 
         Select * from posts_table
     """)
-    fun getAllPosts() : Flow<List<PostEntity>>
+    fun getAllPostIds() : Flow<List<Int>>
 
     @Query("""
-        Select * from posts_table
-        where id = :id
+        Delete from posts_table
+        where postId =:postId
     """)
-    suspend fun getPostById(id: Int) : PostEntity
+    suspend fun delete(postId: Int)
 
 }

@@ -2,16 +2,23 @@ package com.example.socialmedia.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.socialmedia.di.AuthenticatedClient
+import com.example.socialmedia.di.UnauthenticatedClient
 import com.example.socialmedia.model.LoginRequest
 import com.example.socialmedia.model.LoginResponse
 import com.example.socialmedia.model.SignUpRequest
 import com.example.socialmedia.network.LoginApi
+import com.example.socialmedia.network.PostApi
 import com.example.socialmedia.util.NetworkResult
 import org.json.JSONObject
 import retrofit2.Response
 import javax.inject.Inject
 
-class LoginRepository @Inject constructor(private val loginApi: LoginApi) {
+class LoginRepository @Inject constructor() {
+
+    @Inject
+    @UnauthenticatedClient
+    lateinit var loginApi: LoginApi
 
     private  val _loginResponseLiveData = MutableLiveData<NetworkResult<LoginResponse>>()
     val loginResponseLiveData : LiveData<NetworkResult<LoginResponse>>

@@ -7,7 +7,9 @@ import androidx.navigation.findNavController
 import com.example.socialmedia.R
 import com.example.socialmedia.databinding.ActivityLoginBinding
 import com.example.socialmedia.viewmodel.SignUpViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
@@ -19,6 +21,5 @@ class LoginActivity : AppCompatActivity() {
         findNavController(R.id.fragment_view)
 
         ViewModelProvider(this)[SignUpViewModel::class]
-
     }
 }

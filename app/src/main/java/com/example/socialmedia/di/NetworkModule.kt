@@ -11,7 +11,16 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Qualifier
 import javax.inject.Singleton
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class AuthenticatedClient
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class UnauthenticatedClient
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -19,25 +28,45 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesLoginApi(builder: Retrofit.Builder): LoginApi {
+    @UnauthenticatedClient
+    fun providesLoginApi(@UnauthenticatedClient builder: Retrofit.Builder): LoginApi {
         return builder.build().create(LoginApi::class.java)
     }
 
     @Provides
     @Singleton
-    fun providesPostApi(builder: Retrofit.Builder): PostApi {
+    @AuthenticatedClient
+    fun providesPostApi(@AuthenticatedClient builder: Retrofit.Builder): PostApi {
         return builder.build().create(PostApi::class.java)
     }
 
     @Provides
     @Singleton
-    fun providesOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient {
+    @UnauthenticatedClient
+    fun providesBaseOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder().build()
+    }
+
+    @Provides
+    @Singleton
+    @AuthenticatedClient
+    fun providesAuthOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient {
         return OkHttpClient.Builder().addInterceptor(authInterceptor).build()
     }
 
     @Provides
     @Singleton
-    fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit.Builder {
+    @UnauthenticatedClient
+    fun providesBaseRetrofit(@UnauthenticatedClient okHttpClient: OkHttpClient): Retrofit.Builder {
+        return Retrofit.Builder().baseUrl(Constants.BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+    }
+
+    @Provides
+    @Singleton
+    @AuthenticatedClient
+    fun providesAuthRetrofit(@AuthenticatedClient okHttpClient: OkHttpClient): Retrofit.Builder {
         return Retrofit.Builder().baseUrl(Constants.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())

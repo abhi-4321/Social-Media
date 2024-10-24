@@ -8,7 +8,5 @@ import com.example.socialmedia.model.Comment
 @Entity(tableName = "posts_table")
 data class PostEntity(
     @PrimaryKey(autoGenerate = false)
-    val id: Int,
-    val text: String,
-    val created_by: String,
+    val postId: Int
 )

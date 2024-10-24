@@ -5,4 +5,5 @@ object Constants {
     const val TAG = "SocialMedia"
     const val PREF_TOKEN_FILE = "PREF_TOKEN_FILE"
     const val USER_TOKEN = "USER_TOKEN"
+    const val IS_LOGGED_IN = "IS_LOGGED_IN"
 }
