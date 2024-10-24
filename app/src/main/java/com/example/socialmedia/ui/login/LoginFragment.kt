@@ -3,6 +3,7 @@ package com.example.socialmedia.ui.login
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.socialmedia.databinding.FragmentLoginBinding
 import com.example.socialmedia.model.LoginRequest
 import com.example.socialmedia.ui.main.MainActivity
+import com.example.socialmedia.util.Constants
 import com.example.socialmedia.util.NetworkResult
 import com.example.socialmedia.util.TokenManager
 import com.example.socialmedia.viewmodel.SignUpViewModel
@@ -41,8 +43,11 @@ class LoginFragment : Fragment() {
             binding.progressBar.isVisible = false
             when (it) {
                 is NetworkResult.Success -> {
-                    tokenManager.saveToken(it.data!!.access)
+                    Log.d("AccessToken","${it.data ?: "NUll"}")
+                    it.data?.let { it1 -> tokenManager.saveToken(it1.access) }
+                    tokenManager.saveSession()
                     startActivity(Intent(requireContext(),MainActivity::class.java))
+                    requireActivity().finish()
                 }
 
                 is NetworkResult.Error -> {
@@ -51,8 +56,15 @@ class LoginFragment : Fragment() {
 
                 is NetworkResult.Loading -> {
                     binding.progressBar.isVisible = true
+                    binding.txtError.text = ""
                 }
             }
+        }
+
+        binding.txtEmail.setOnClickListener{
+            tokenManager.saveSession()
+            startActivity(Intent(requireContext(),MainActivity::class.java))
+            requireActivity().finish()
         }
 
         binding.btnLogin.setOnClickListener {

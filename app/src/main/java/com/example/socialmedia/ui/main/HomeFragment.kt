@@ -2,13 +2,10 @@ package com.example.socialmedia.ui.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -19,35 +16,28 @@ import com.example.socialmedia.adapter.PostsAdapter
 import com.example.socialmedia.databinding.FragmentHomeBinding
 import com.example.socialmedia.model.Post
 import com.example.socialmedia.viewmodel.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding: FragmentHomeBinding get() = _binding!!
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        requireActivity().addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.main_menu, menu)
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                if (menuItem.itemId == R.id.profile)
-                    findNavController().navigate(HomeFragmentDirections)
-                return true
-            }
-        })
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        binding.toolbar.inflateMenu(R.menu.main_menu)
+        binding.toolbar.setOnMenuItemClickListener {
+            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToProfileFragment())
+            true
+        }
+
 
         val viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
 
@@ -88,8 +78,13 @@ class HomeFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.allPostsFlow.collectLatest { posts ->
+                Log.d("HomeFrag", "$posts")
                 adapter.submitList(posts)
             }
+        }
+
+        binding.fab.setOnClickListener {
+            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToAddPostFragment())
         }
 
         return binding.root

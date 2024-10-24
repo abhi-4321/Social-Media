@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingVertical="@dimen/_10sdp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -9,7 +10,6 @@
         android:id="@+id/image"
         android:layout_width="@dimen/_26sdp"
         android:layout_height="@dimen/_26sdp"
-        android:layout_marginTop="@dimen/_10sdp"
         android:src="@drawable/user"
         android:layout_marginStart="@dimen/_12sdp"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,16 +40,5 @@
         app:layout_constraintStart_toEndOf="@+id/image"
         app:layout_constraintTop_toBottomOf="@+id/posted_by"
         tools:text="This is my first comment. This is my first comment. This is my first comment." />
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="#5CA2A2A2"
-        android:layout_marginTop="@dimen/_10sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

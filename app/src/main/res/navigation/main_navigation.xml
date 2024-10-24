@@ -31,6 +31,14 @@
             app:popEnterAnim="@anim/pop_enter_anim"
             app:popExitAnim="@anim/pop_exit_anim"
             />
+        <action
+            android:id="@+id/action_homeFragment_to_addPostFragment"
+            app:destination="@id/addPostFragment"
+            app:enterAnim="@anim/enter_anim"
+            app:exitAnim="@anim/exit_anim"
+            app:popEnterAnim="@anim/pop_enter_anim"
+            app:popExitAnim="@anim/pop_exit_anim"
+            />
     </fragment>
     <fragment
         android:id="@+id/postInFragment"
@@ -44,7 +52,67 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.socialmedia.ui.main.ProfileFragment"
+        android:name="com.example.socialmedia.ui.profile.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_userPostsFragment"
+            app:destination="@id/userPostsFragment"
+            app:enterAnim="@anim/enter_anim"
+            app:exitAnim="@anim/exit_anim"
+            app:popEnterAnim="@anim/pop_enter_anim"
+            app:popExitAnim="@anim/pop_exit_anim"
+            />
+        <action
+            android:id="@+id/action_profileFragment_to_savedPostsFragment"
+            app:destination="@id/savedPostsFragment"
+            app:enterAnim="@anim/enter_anim"
+            app:exitAnim="@anim/exit_anim"
+            app:popEnterAnim="@anim/pop_enter_anim"
+            app:popExitAnim="@anim/pop_exit_anim"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/userPostsFragment"
+        android:name="com.example.socialmedia.ui.profile.UserPostsFragment"
+        android:label="fragment_user_posts"
+        tools:layout="@layout/fragment_user_posts" >
+        <action
+            android:id="@+id/action_userPostsFragment_to_postInFragment"
+            app:destination="@id/postInFragment"
+            app:enterAnim="@anim/enter_anim"
+            app:exitAnim="@anim/exit_anim"
+            app:popEnterAnim="@anim/pop_enter_anim"
+            app:popExitAnim="@anim/pop_exit_anim"
+            >
+            <argument
+                android:name="postId"
+                app:argType="integer"
+                />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/savedPostsFragment"
+        android:name="com.example.socialmedia.ui.profile.SavedPostsFragment"
+        android:label="fragment_saved_posts"
+        tools:layout="@layout/fragment_saved_posts" >
+        <action
+            android:id="@+id/action_savedPostsFragment_to_postInFragment"
+            app:destination="@id/postInFragment"
+            app:enterAnim="@anim/enter_anim"
+            app:exitAnim="@anim/exit_anim"
+            app:popEnterAnim="@anim/pop_enter_anim"
+            app:popExitAnim="@anim/pop_exit_anim"
+            >
+            <argument
+                android:name="postId"
+                app:argType="integer"
+                />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/addPostFragment"
+        android:name="com.example.socialmedia.ui.main.AddPostFragment"
+        android:label="fragment_add_post"
+        tools:layout="@layout/fragment_add_post" />
 </navigation>
