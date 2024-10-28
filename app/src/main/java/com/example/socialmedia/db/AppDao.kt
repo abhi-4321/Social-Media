@@ -11,18 +11,13 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface AppDao {
 
-//    @Upsert
-//    suspend fun upsert(postId: Int)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun upsert(postEntity: PostEntity)
 
-    @Query(""" 
-        Select * from posts_table
-    """)
+    @Query("Select * from posts_table")
     fun getAllPostIds() : Flow<List<Int>>
 
-    @Query("""
-        Delete from posts_table
-        where postId =:postId
-    """)
+    @Query("Delete from posts_table where postId =:postId")
     suspend fun delete(postId: Int)
 
 }

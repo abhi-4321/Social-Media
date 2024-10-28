@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_12sdp"
-        android:src="@drawable/round_close_24"
+        android:src="@drawable/baseline_saved"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/image" />
 
@@ -51,12 +51,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="This is my first post. This is my first post. This is my first post. This is my first post. This is my first post. This is my first post. This is my first post. This is my first post. This is my first post. This is my first post. " />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_10sdp"
-        android:gravity="center"
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
@@ -64,14 +63,48 @@
             android:id="@+id/like"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/heart" />
+            android:contentDescription="@string/unliked"
+            android:src="@drawable/heart_unfilled"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/likeCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_8ssp"
+            android:fontFamily="@font/sf_pro_display_regular"
+            tools:text="10"
+            android:textColor="@color/black_09"
+            app:layout_constraintTop_toBottomOf="@id/like"
+            app:layout_constraintStart_toStartOf="@id/like"
+            app:layout_constraintEnd_toEndOf="@id/like"
+            />
 
         <ImageView
             android:id="@+id/comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_20sdp"
-            android:src="@drawable/comment" />
+            android:layout_marginTop="@dimen/_2sdp"
+            android:src="@drawable/comment"
+            app:layout_constraintStart_toEndOf="@id/like"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/commentCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_8ssp"
+            android:fontFamily="@font/sf_pro_display_regular"
+            tools:text="10"
+            android:textColor="@color/black_09"
+            app:layout_constraintTop_toBottomOf="@id/comment"
+            app:layout_constraintStart_toStartOf="@id/comment"
+            app:layout_constraintEnd_toEndOf="@id/comment"
+            />
 
         <ImageView
             android:id="@+id/share"
@@ -79,9 +112,25 @@
             android:layout_height="wrap_content"
             android:scaleY="1.1"
             android:layout_marginStart="@dimen/_20sdp"
-            android:src="@drawable/share" />
+            android:src="@drawable/share"
+            app:layout_constraintStart_toEndOf="@id/comment"
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/shareCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_8ssp"
+            android:fontFamily="@font/sf_pro_display_regular"
+            tools:text="10"
+            android:textColor="@color/black_09"
+            app:layout_constraintTop_toBottomOf="@id/share"
+            app:layout_constraintStart_toStartOf="@id/share"
+            app:layout_constraintEnd_toEndOf="@id/share"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
         android:layout_width="0dp"

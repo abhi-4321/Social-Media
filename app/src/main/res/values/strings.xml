@@ -32,4 +32,7 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="clear">Clear</string>
     <string name="done">Done</string>
+    <string name="liked">liked</string>
+    <string name="unliked">unliked</string>
+    <string name="comments">Comments</string>
 </resources>

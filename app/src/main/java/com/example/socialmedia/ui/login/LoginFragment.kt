@@ -8,18 +8,23 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.socialmedia.databinding.FragmentLoginBinding
 import com.example.socialmedia.model.LoginRequest
+import com.example.socialmedia.repository.PostRepository
 import com.example.socialmedia.ui.main.MainActivity
-import com.example.socialmedia.util.Constants
 import com.example.socialmedia.util.NetworkResult
 import com.example.socialmedia.util.TokenManager
 import com.example.socialmedia.viewmodel.SignUpViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -30,6 +35,9 @@ class LoginFragment : Fragment() {
 
     @Inject
     lateinit var tokenManager: TokenManager
+
+    @Inject
+    lateinit var postRepository: PostRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,11 +51,35 @@ class LoginFragment : Fragment() {
             binding.progressBar.isVisible = false
             when (it) {
                 is NetworkResult.Success -> {
-                    Log.d("AccessToken","${it.data ?: "NUll"}")
+                    Log.d("AccessToken", "${it.data ?: "NUll"}")
                     it.data?.let { it1 -> tokenManager.saveToken(it1.access) }
-                    tokenManager.saveSession()
-                    startActivity(Intent(requireContext(),MainActivity::class.java))
-                    requireActivity().finish()
+                    Log.d("TokenUsername", "Login: ${tokenManager.getSession()}")
+
+                    viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                        try {
+                            val profileResponse = postRepository.getProfile()
+                            withContext(Dispatchers.Main) {
+                                if (profileResponse.isSuccessful && profileResponse.body() != null) {
+                                    tokenManager.saveSession(profileResponse.body()!!.username)
+                                    startActivity(
+                                        Intent(
+                                            requireContext(),
+                                            MainActivity::class.java
+                                        )
+                                    )
+                                    requireActivity().finish()
+                                } else {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Error occurred: Please Login Again",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        } catch (e: Exception) {
+                            Log.e("Exception", "onCreateView: ${e.message}")
+                        }
+                    }
                 }
 
                 is NetworkResult.Error -> {
@@ -59,12 +91,6 @@ class LoginFragment : Fragment() {
                     binding.txtError.text = ""
                 }
             }
-        }
-
-        binding.txtEmail.setOnClickListener{
-            tokenManager.saveSession()
-            startActivity(Intent(requireContext(),MainActivity::class.java))
-            requireActivity().finish()
         }
 
         binding.btnLogin.setOnClickListener {

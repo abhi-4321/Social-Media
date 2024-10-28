@@ -44,7 +44,7 @@ class SignUpFragment : Fragment() {
             when (it) {
                 is NetworkResult.Success -> {
                     tokenManager.saveToken(it.data!!.access)
-                    tokenManager.saveSession()
+                    tokenManager.saveSession(binding.txtUsername.text.toString())
                     startActivity(Intent(requireContext(), MainActivity::class.java))
                     requireActivity().finish()
                 }

@@ -38,7 +38,7 @@ class SavedPostsAdapter(private val onItemsClick: OnItemsClick) : ListAdapter<Po
                 onItemsClick.onCommentClick(post.id)
             }
             binding.remove.setOnClickListener {
-                onItemsClick.onRemoveClick()
+                onItemsClick.onRemoveClick(post.id)
             }
         }
 
@@ -58,6 +58,6 @@ class SavedPostsAdapter(private val onItemsClick: OnItemsClick) : ListAdapter<Po
         fun onLikeClick()
         fun onCommentClick(postId: Int)
         fun onShareClick(post: Post)
-        fun onRemoveClick()
+        fun onRemoveClick(postId: Int)
     }
 }

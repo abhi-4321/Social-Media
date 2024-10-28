@@ -58,7 +58,7 @@ object NetworkModule {
     @Singleton
     @UnauthenticatedClient
     fun providesBaseRetrofit(@UnauthenticatedClient okHttpClient: OkHttpClient): Retrofit.Builder {
-        return Retrofit.Builder().baseUrl(Constants.BASE_URL)
+        return Retrofit.Builder().baseUrl(Constants.BASE_URL_LOGIN)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
     }
@@ -67,7 +67,7 @@ object NetworkModule {
     @Singleton
     @AuthenticatedClient
     fun providesAuthRetrofit(@AuthenticatedClient okHttpClient: OkHttpClient): Retrofit.Builder {
-        return Retrofit.Builder().baseUrl(Constants.BASE_URL)
+        return Retrofit.Builder().baseUrl(Constants.BASE_URL_HOME)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
     }

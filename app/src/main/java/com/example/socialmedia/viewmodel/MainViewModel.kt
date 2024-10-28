@@ -21,8 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(private val postRepository: PostRepository) : ViewModel() {
 
-    private val _allPostsFlow: MutableStateFlow<List<Post>> = MutableStateFlow(emptyList())
-    val allPostsFlow: StateFlow<List<Post>> get() = _allPostsFlow
+    private val _allPostsFlow: MutableStateFlow<PostResult<List<Post>>> = MutableStateFlow(PostResult.Loading())
+    val allPostsFlow: StateFlow<PostResult<List<Post>>> get() = _allPostsFlow
 
 
     fun getAllPosts() {
@@ -30,9 +30,9 @@ class MainViewModel @Inject constructor(private val postRepository: PostReposito
             val response = postRepository.getAllPosts()
             Log.d("HomeFrag", "$response ${response.code()}")
             if (response.isSuccessful && response.body() != null) {
-                _allPostsFlow.emit(response.body()!!)
+                _allPostsFlow.emit(PostResult.Success(response.body()!!))
             } else {
-                _allPostsFlow.emit(emptyList())
+                _allPostsFlow.emit(PostResult.Failure())
             }
         }
     }
@@ -104,19 +104,37 @@ class MainViewModel @Inject constructor(private val postRepository: PostReposito
         }
     }
 
+    val deleteCallback = MutableStateFlow<PostResult<Unit>>(PostResult.Loading())
+
+    fun deletePost(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = postRepository.deletePost(id)
+            if (response.isSuccessful) {
+                deleteCallback.emit(PostResult.Success(Unit))
+            } else {
+                deleteCallback.emit(PostResult.Failure())
+            }
+        }
+
+    }
+
+    suspend fun likePost(id: Int) : Response<Void> {
+        return postRepository.likePost(id)
+    }
+
     fun getAllPostIds() : Flow<List<Int>> {
         return postRepository.getAllPostIds()
     }
 
-    fun upsert(postId: Int) {
+    fun savePostId(postId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            postRepository.upsert(postId)
+            postRepository.savePostId(postId)
         }
     }
 
-    suspend fun delete(postId: Int) {
+    fun deletePostId(postId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            postRepository.delete(postId)
+            postRepository.deletePostId(postId)
         }
     }
 

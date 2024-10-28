@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.example.socialmedia.util.Constants.IS_LOGGED_IN
 import com.example.socialmedia.util.Constants.PREF_TOKEN_FILE
+import com.example.socialmedia.util.Constants.USERNAME
 import com.example.socialmedia.util.Constants.USER_TOKEN
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -15,7 +16,6 @@ class TokenManager @Inject constructor(@ApplicationContext context : Context) {
 
     fun saveToken(token : String){
         Log.d("Authtoken", pref.getString(USER_TOKEN ,null).toString())
-
         editor.putString(USER_TOKEN, token)
         editor.apply()
     }
@@ -26,17 +26,16 @@ class TokenManager @Inject constructor(@ApplicationContext context : Context) {
     }
 
 
-    fun getSession() : Boolean {
-        return pref.getBoolean(IS_LOGGED_IN,false)
+    fun getSession() : String? {
+        return pref.getString(USERNAME,null)
     }
 
-    fun saveSession() {
-        editor.putBoolean(IS_LOGGED_IN,true)
+    fun saveSession(name: String) {
+        editor.putString(USERNAME,name)
         editor.apply()
     }
 
     fun deleteSession() {
         editor.clear().apply()
     }
-
 }

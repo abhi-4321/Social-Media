@@ -1,6 +1,7 @@
 package com.example.socialmedia.repository
 
 import com.example.socialmedia.db.AppDao
+import com.example.socialmedia.db.entities.PostEntity
 import com.example.socialmedia.di.AuthenticatedClient
 import com.example.socialmedia.model.Comment
 import com.example.socialmedia.model.CreatePost
@@ -38,15 +39,23 @@ class PostRepository @Inject constructor(private val appDao: AppDao) {
         return postApi.getAllPostsByUser()
     }
 
+    suspend fun deletePost(id: Int) : Response<Void> {
+        return postApi.deletePost(id)
+    }
+
+    suspend fun likePost(id: Int) : Response<Void> {
+        return postApi.likePost(id)
+    }
+
     fun getAllPostIds() : Flow<List<Int>> {
         return appDao.getAllPostIds()
     }
 
-    suspend fun upsert(postId: Int) {
-//        appDao.upsert(postId)
+    suspend fun savePostId(postId: Int) {
+        appDao.upsert(PostEntity(postId))
     }
 
-    suspend fun delete(postId: Int) {
+    suspend fun deletePostId(postId: Int) {
         appDao.delete(postId)
     }
 

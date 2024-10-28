@@ -4,5 +4,6 @@ data class Post(
     val id: Int,
     val text: String,
     val created_by: String,
-    val comments: List<Comment>
+    val comments: List<Comment>,
+    val liked_by: List<String>
 )

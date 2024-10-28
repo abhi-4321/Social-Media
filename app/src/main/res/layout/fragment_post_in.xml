@@ -25,9 +25,12 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/add_box"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout2">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -53,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_12sdp"
-                android:src="@drawable/baseline_more_horiz_24"
+                android:src="@drawable/baseline_unsaved"
                 app:layout_constraintBottom_toBottomOf="@+id/image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/image" />
@@ -85,12 +88,11 @@
                 app:layout_constraintTop_toBottomOf="@+id/image"
                 tools:text="This is my first post. This is my first post. This is my first post. This is my first post. This is my first post. This is my first post. This is my first post. This is my first post. This is my first post. This is my first post. " />
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/linear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:gravity="center"
                 app:layout_constraintStart_toStartOf="@+id/textView"
                 app:layout_constraintTop_toBottomOf="@+id/textView">
 
@@ -98,17 +100,50 @@
                     android:id="@+id/like"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/heart" />
+                    android:contentDescription="@string/unliked"
+                    android:src="@drawable/heart_unfilled"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/likeCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_8ssp"
+                    android:fontFamily="@font/sf_pro_display_regular"
+                    tools:text="10"
+                    android:textColor="@color/black_09"
+                    app:layout_constraintTop_toBottomOf="@id/like"
+                    app:layout_constraintStart_toStartOf="@id/like"
+                    app:layout_constraintEnd_toEndOf="@id/like"
+                    />
 
                 <ImageView
                     android:id="@+id/share"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_20sdp"
                     android:scaleY="1.1"
-                    android:src="@drawable/share" />
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:src="@drawable/share"
+                    app:layout_constraintStart_toEndOf="@id/like"
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
 
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/shareCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_8ssp"
+                    android:fontFamily="@font/sf_pro_display_regular"
+                    tools:text="10"
+                    android:textColor="@color/black_09"
+                    app:layout_constraintTop_toBottomOf="@id/share"
+                    app:layout_constraintStart_toStartOf="@id/share"
+                    app:layout_constraintEnd_toEndOf="@id/share"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <View
                 android:id="@+id/view"
@@ -121,16 +156,43 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linear" />
 
+            <TextView
+                android:id="@+id/comments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:fontFamily="@font/sf_pro_display_semibold"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view"
+                android:text="@string/comments" />
+
+            <TextView
+                android:id="@+id/commentCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:fontFamily="@font/sf_pro_display_semibold"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12ssp"
+                android:layout_marginEnd="@dimen/_15sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view"
+                tools:text="10" />
+
             <View
                 android:id="@+id/view2"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_marginTop="0.1dp"
                 android:background="#80A2A2A2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/view" />
+                app:layout_constraintTop_toBottomOf="@id/comments" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler"
@@ -141,7 +203,7 @@
                 tools:listitem="@layout/comment_item"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/view" />
+                app:layout_constraintTop_toBottomOf="@id/view2" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -149,6 +211,7 @@
     </androidx.core.widget.NestedScrollView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/add_box"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

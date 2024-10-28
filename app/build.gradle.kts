@@ -100,4 +100,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
 
+    //Swipe to refresh
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 }

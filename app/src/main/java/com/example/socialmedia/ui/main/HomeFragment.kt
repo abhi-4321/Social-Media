@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -15,16 +16,28 @@ import com.example.socialmedia.R
 import com.example.socialmedia.adapter.PostsAdapter
 import com.example.socialmedia.databinding.FragmentHomeBinding
 import com.example.socialmedia.model.Post
+import com.example.socialmedia.repository.PostRepository
+import com.example.socialmedia.util.TokenManager
+import com.example.socialmedia.viewmodel.LikeViewModel
 import com.example.socialmedia.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding: FragmentHomeBinding get() = _binding!!
+
+    @Inject
+    lateinit var tokenManager: TokenManager
+
+    @Inject
+    lateinit var postRepository: PostRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,12 +50,19 @@ class HomeFragment : Fragment() {
             findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToProfileFragment())
             true
         }
-
+        val name = tokenManager.getSession()!!
+        Log.d("TokenUsername", "Home: $name")
 
         val viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
 
-        val adapter = PostsAdapter(object : PostsAdapter.OnItemsClick {
-            override fun onLikeClick() {
+        viewModel.getAllPosts()
+
+        val adapter = PostsAdapter(postRepository, object : PostsAdapter.PostInteractionListener {
+            override fun onLikeClick(isSuccessful: Boolean) {
+                if (isSuccessful)
+                    viewModel.getAllPosts()
+                else
+                    Toast.makeText(requireContext(), "Couldn't connect", Toast.LENGTH_SHORT).show()
             }
 
             override fun onCommentClick(postId: Int) {
@@ -64,23 +84,27 @@ class HomeFragment : Fragment() {
                 startActivity(shareIntent)
             }
 
-            override fun onMoreClick() {
+            override fun onSaveClick(postId: Int) {
+                viewModel.savePostId(postId)
             }
 
-        })
+        }, name)
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            viewModel.getAllPosts()
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.allPostsFlow.collectLatest {
+                binding.swipeRefreshLayout.isRefreshing = false
+                val list = it.data ?: return@collectLatest
+                adapter.submitList(list)
+            }
+        }
 
         binding.recycler.apply {
             layoutManager = LinearLayoutManager(requireContext())
             this.adapter = adapter
-        }
-
-        viewModel.getAllPosts()
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.allPostsFlow.collectLatest { posts ->
-                Log.d("HomeFrag", "$posts")
-                adapter.submitList(posts)
-            }
         }
 
         binding.fab.setOnClickListener {
